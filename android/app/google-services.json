@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "466083394691",
+    "project_id": "memory-vault-1ca98",
+    "storage_bucket": "memory-vault-1ca98.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466083394691:android:784f49cc671e58db5257b6",
+        "android_client_info": {
+          "package_name": "com.example.memory_vault"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDatx8Om8J1iO26XACetjMJm9Qpq7gapZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
