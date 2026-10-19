@@ -11,16 +11,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 
 // ============ THEME / CONSTANTS ============
-const bgDark = Color(0xFF2A1A4F), bgCard = Color(0xFF42308A), bgShelf = Color(0xFF1C1040);
-const borderWarm = Color(0xFF6E58B8), textMain = Color(0xFFF7F1FF), textMuted = Color(0xFFBBAAE6);
-const accent = Color(0xFFFFC76B); // Joy's sunset gold
+
+const bgDark = Color(0xFF171232), bgCard = Color(0xFF241C4A), bgShelf = Color(0xFF0F0B22);
+const borderWarm = Color(0xFF3A2F6B), textMain = Color(0xFFEEEAF8), textMuted = Color(0xFF9A93C0);
+const accent = Color(0xFFC8B6FF);
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 enum Emo { joy, sadness, anger, fear, disgust }
 const emoColor = {
-  Emo.joy: Color(0xFFFFD43B), Emo.sadness: Color(0xFF4F9BEF), Emo.anger: Color(0xFFE5484D),
-  Emo.fear: Color(0xFFB388EB), Emo.disgust: Color(0xFF4CC46A),
+  Emo.joy: Color(0xFFF5C84C), Emo.sadness: Color(0xFF5B8DEF), Emo.anger: Color(0xFFE5534B),
+  Emo.fear: Color(0xFF9D7BE0), Emo.disgust: Color(0xFF4FBF7F),
 };
+
 const emoTag = {
   Emo.joy: 'a golden, sparkly little moment',
   Emo.sadness: 'a quiet blue ache, but it matters',
@@ -374,7 +376,7 @@ class _DustPainter extends CustomPainter {
     for (final p in ps) {
       final t = (v * p[2] + p[1]) % 1;
       canvas.drawCircle(Offset(size.width * p[0] + sin(t * 12) * 18, size.height * (1 - t)), p[3],
-          Paint()..color = const Color(0xFFFFD700).withOpacity(sin(t * pi) * .55));
+          Paint()..color = const Color(0xFFE9E1FF).withOpacity(sin(t * pi) * .55));
     }
   }
   @override
@@ -382,10 +384,8 @@ class _DustPainter extends CustomPainter {
 }
 
 BoxDecoration warmBg() => const BoxDecoration(
-    gradient: LinearGradient(
-        begin: Alignment.topCenter, end: Alignment.bottomCenter,
-        colors: [Color(0xFF1F1146), Color(0xFF3A2470), Color(0xFF7A4B96), Color(0xFFC9728A)],
-        stops: [0, .45, .8, 1]));
+    gradient: RadialGradient(center: Alignment(0, -.7), radius: 1.3,
+        colors: [Color(0xFF2A2060), Color(0xFF171232), Color(0xFF0F0B22)], stops: [0, .55, 1]));
 
 // ============ SPLASH ============
 class Splash extends StatefulWidget {
@@ -425,7 +425,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
               FadeTransition(
                 opacity: c.drive(CurveTween(curve: const Interval(.6, 1))),
                 child: const Column(children: [
-                  Text('Memory Vault', style: TextStyle(color: accent, fontSize: 34, letterSpacing: 2, shadows: [Shadow(color: Color(0x88FFC76B), blurRadius: 16)])),
+                  Text('Memory Vault', style: TextStyle(color: accent, fontSize: 42, letterSpacing: 2, shadows: [Shadow(color: Color(0x88C8B6FF), blurRadius: 16)])),
                   SizedBox(height: 6),
                   Text('where feelings glow', style: TextStyle(color: textMuted, fontStyle: FontStyle.italic)),
                 ]),
@@ -573,8 +573,9 @@ class _HomeState extends State<Home> {
       builder: (_, __) => Scaffold(
         appBar: AppBar(
           title: const Column(mainAxisSize: MainAxisSize.min, children: [
-            Text('Memory Vault', style: TextStyle(color: accent, fontSize: 22, letterSpacing: 1.5, shadows: [Shadow(color: Color(0x66FFC76B), blurRadius: 12)])),
-            Text('where feelings glow', style: TextStyle(color: textMuted, fontSize: 11, fontStyle: FontStyle.italic)),
+            Text('Memory Vault', style: TextStyle(color: textMain, fontSize: 20, fontWeight: FontWeight.w800, letterSpacing: .6)),
+            SizedBox(height: 2),
+            Text('WHERE FEELINGS GLOW', style: TextStyle(color: accent, fontSize: 9.5, fontWeight: FontWeight.w700, letterSpacing: 2.4)),
           ]),
           actions: [
             if (tab == 0)
@@ -592,12 +593,16 @@ class _HomeState extends State<Home> {
           ]),
         ),
         floatingActionButton: tab == 2
-            ? null
-            : FloatingActionButton.extended(
-                backgroundColor: accent, foregroundColor: bgShelf,
-                icon: const Icon(Icons.add_rounded), label: const Text('New memory'),
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddPage())),
+          ? null
+          : FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: accent, foregroundColor: bgShelf, elevation: 6, shadowColor: accent,
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12), shape: const StadiumBorder(),
               ),
+              icon: const Icon(Icons.add_rounded, size: 18),
+              label: const Text('New memory', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AddPage())),
+            ),
         bottomNavigationBar: NavigationBar(
           selectedIndex: tab,
           onDestinationSelected: (i) => setState(() => tab = i),
@@ -711,7 +716,7 @@ class Rack extends StatelessWidget {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    border: const Border(bottom: BorderSide(color: Color(0xFF140A2C), width: 6)),
+                    border: const Border(bottom: BorderSide(color: Color(0xFF0A0718), width: 6)),
                     gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
                         colors: [Colors.transparent, accent.withOpacity(.06)]),
                   ),
@@ -830,7 +835,7 @@ void openMemory(BuildContext context, String id) => showGeneralDialog(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'close',
-      barrierColor: const Color(0xD9140A2C),
+      barrierColor: const Color(0xD90A0718),
       transitionDuration: const Duration(milliseconds: 250),
       transitionBuilder: (_, a, __, child) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5 * a.value, sigmaY: 5 * a.value),
@@ -1118,18 +1123,23 @@ class ProfilePage extends StatelessWidget {
         final maxC = max(1, counts.values.reduce(max));
         return ListView(padding: const EdgeInsets.fromLTRB(20, 12, 20, 40), children: [
           Center(
-            child: SizedBox(
-              width: 120, height: 120,
-              child: Stack(alignment: Alignment.center, children: [
-                Orb(color: accent, image: u.bytes, size: 104, onTap: pickAvatar),
-                if (u.bytes == null)
-                  IgnorePointer(child: Text(u.name[0].toUpperCase(), style: const TextStyle(fontSize: 42, color: bgShelf, fontWeight: FontWeight.bold))),
-                Positioned(
-                  bottom: 4, right: 4,
-                  child: GestureDetector(
-                    onTap: pickAvatar,
-                    child: const CircleAvatar(radius: 16, backgroundColor: bgCard, child: Icon(Icons.camera_alt_rounded, size: 16, color: accent)),
+            child: GestureDetector(
+              onTap: pickAvatar,
+              child: Stack(children: [
+                Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: accent.withOpacity(.6), width: 2)),
+                  child: CircleAvatar(
+                    radius: 52, backgroundColor: bgCard,
+                    backgroundImage: u.bytes != null ? MemoryImage(u.bytes!) : null,
+                    child: u.bytes == null
+                        ? Text(u.name[0].toUpperCase(), style: const TextStyle(fontSize: 40, color: accent, fontWeight: FontWeight.w700))
+                        : null,
                   ),
+                ),
+                const Positioned(
+                  bottom: 2, right: 2,
+                  child: CircleAvatar(radius: 16, backgroundColor: accent, child: Icon(Icons.camera_alt_rounded, size: 16, color: bgShelf)),
                 ),
               ]),
             ),
