@@ -11,15 +11,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 
 // ============ THEME / CONSTANTS ============
-const bgDark = Color(0xFF2A1F1D), bgCard = Color(0xFF3D2E2B), bgShelf = Color(0xFF1F1614);
-const borderWarm = Color(0xFF5C453D), textMain = Color(0xFFF4ECE1), textMuted = Color(0xFFBDA899);
-const accent = Color(0xFFF7D0A1);
+const bgDark = Color(0xFF2A1A4F), bgCard = Color(0xFF42308A), bgShelf = Color(0xFF1C1040);
+const borderWarm = Color(0xFF6E58B8), textMain = Color(0xFFF7F1FF), textMuted = Color(0xFFBBAAE6);
+const accent = Color(0xFFFFC76B); // Joy's sunset gold
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 enum Emo { joy, sadness, anger, fear, disgust }
 const emoColor = {
-  Emo.joy: Color(0xFFFFD700), Emo.sadness: Color(0xFF4A90E2), Emo.anger: Color(0xFFE74C3C),
-  Emo.fear: Color(0xFF9B59B6), Emo.disgust: Color(0xFF2ECC71),
+  Emo.joy: Color(0xFFFFD43B), Emo.sadness: Color(0xFF4F9BEF), Emo.anger: Color(0xFFE5484D),
+  Emo.fear: Color(0xFFB388EB), Emo.disgust: Color(0xFF4CC46A),
 };
 const emoTag = {
   Emo.joy: 'a golden, sparkly little moment',
@@ -382,7 +382,10 @@ class _DustPainter extends CustomPainter {
 }
 
 BoxDecoration warmBg() => const BoxDecoration(
-    gradient: RadialGradient(center: Alignment(0, -.6), radius: 1.3, colors: [Color(0xFF3F2E28), bgDark]));
+    gradient: LinearGradient(
+        begin: Alignment.topCenter, end: Alignment.bottomCenter,
+        colors: [Color(0xFF1F1146), Color(0xFF3A2470), Color(0xFF7A4B96), Color(0xFFC9728A)],
+        stops: [0, .45, .8, 1]));
 
 // ============ SPLASH ============
 class Splash extends StatefulWidget {
@@ -422,7 +425,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
               FadeTransition(
                 opacity: c.drive(CurveTween(curve: const Interval(.6, 1))),
                 child: const Column(children: [
-                  Text('Memory Vault', style: TextStyle(color: accent, fontSize: 34, letterSpacing: 2, shadows: [Shadow(color: Color(0x88F7D0A1), blurRadius: 16)])),
+                  Text('Memory Vault', style: TextStyle(color: accent, fontSize: 34, letterSpacing: 2, shadows: [Shadow(color: Color(0x88FFC76B), blurRadius: 16)])),
                   SizedBox(height: 6),
                   Text('where feelings glow', style: TextStyle(color: textMuted, fontStyle: FontStyle.italic)),
                 ]),
@@ -570,7 +573,7 @@ class _HomeState extends State<Home> {
       builder: (_, __) => Scaffold(
         appBar: AppBar(
           title: const Column(mainAxisSize: MainAxisSize.min, children: [
-            Text('Memory Vault', style: TextStyle(color: accent, fontSize: 22, letterSpacing: 1.5, shadows: [Shadow(color: Color(0x66F7D0A1), blurRadius: 12)])),
+            Text('Memory Vault', style: TextStyle(color: accent, fontSize: 22, letterSpacing: 1.5, shadows: [Shadow(color: Color(0x66FFC76B), blurRadius: 12)])),
             Text('where feelings glow', style: TextStyle(color: textMuted, fontSize: 11, fontStyle: FontStyle.italic)),
           ]),
           actions: [
@@ -627,7 +630,7 @@ class VaultPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 2, 20, 6),
             child: Row(children: [
-              Expanded(child: Text('$g, ${app.user!.name.split(' ').first} ✦', style: const TextStyle(color: textMain, fontSize: 16), overflow: TextOverflow.ellipsis)),
+              Expanded(child: Text('$g, ${app.user!.name.split(' ').first} ', style: const TextStyle(color: textMain, fontSize: 16), overflow: TextOverflow.ellipsis)),
               Text('${app.all.length} ${app.all.length == 1 ? 'memory' : 'memories'}', style: const TextStyle(color: textMuted, fontSize: 12)),
             ]),
           ),
@@ -638,7 +641,7 @@ class VaultPage extends StatelessWidget {
               deleteIcon: const Icon(Icons.close, size: 16), onDeleted: () => app.setFilter(null, null),
             ),
           Expanded(child: RackPager(key: ValueKey('${app.fy}-${app.fm}-${list.length}'), list: list, racks: racks)),
-          const SizedBox(height: 56),
+          const SizedBox(height: 84),
         ]);
       },
     );
@@ -708,7 +711,7 @@ class Rack extends StatelessWidget {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    border: const Border(bottom: BorderSide(color: Color(0xFF140E0D), width: 6)),
+                    border: const Border(bottom: BorderSide(color: Color(0xFF140A2C), width: 6)),
                     gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
                         colors: [Colors.transparent, accent.withOpacity(.06)]),
                   ),
@@ -733,7 +736,7 @@ class Rack extends StatelessWidget {
           ]),
           if (items.isEmpty)
             Center(
-              child: Text(app.all.isEmpty ? 'A quiet shelf, waiting for\nits first glowing memory ✦' : 'Nothing glows here yet.\nTry another month ✦',
+              child: Text(app.all.isEmpty ? 'A quiet shelf, waiting for\nits first glowing memory ' : 'Nothing glows here yet.\nTry another month ',
                   textAlign: TextAlign.center, style: const TextStyle(color: textMuted, fontStyle: FontStyle.italic, height: 1.5)),
             ),
         ]);
@@ -790,7 +793,7 @@ class CorePage extends StatelessWidget {
         final core = app.core;
         final w = (MediaQuery.of(context).size.width - 56) / 2;
         return ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 100), children: [
-          const Center(child: Text('✦ Core Memories ✦', style: TextStyle(color: accent, fontSize: 26))),
+          const Center(child: Text(' Core Memories ', style: TextStyle(color: accent, fontSize: 26))),
           const SizedBox(height: 4),
           Center(child: Text('${core.length}/5 pedestals glowing', style: const TextStyle(color: textMuted, fontStyle: FontStyle.italic))),
           const SizedBox(height: 24),
@@ -827,7 +830,7 @@ void openMemory(BuildContext context, String id) => showGeneralDialog(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'close',
-      barrierColor: const Color(0xD90F0A09),
+      barrierColor: const Color(0xD9140A2C),
       transitionDuration: const Duration(milliseconds: 250),
       transitionBuilder: (_, a, __, child) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5 * a.value, sigmaY: 5 * a.value),
@@ -955,7 +958,7 @@ class _AddPageState extends State<AddPage> {
 
   void save() {
     if (title.text.trim().isEmpty && diary.text.trim().isEmpty && b64 == null) {
-      snack(context, 'Add a photo or write something first ✦');
+      snack(context, 'Add a photo or write something first ');
       return;
     }
     app.put(Memory(
@@ -1171,7 +1174,7 @@ class ProfilePage extends StatelessWidget {
                 minimumSize: const Size.fromHeight(50), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
           ),
           const SizedBox(height: 18),
-          const Center(child: Text('made with feelings ✦ v1.0', style: TextStyle(color: borderWarm, fontSize: 11))),
+          const Center(child: Text('made with feelings - v1.0', style: TextStyle(color: borderWarm, fontSize: 11))),
         ]);
       },
     );
